@@ -57,10 +57,10 @@ func TestServer(t *testing.T) {
 			name: "Get all posts from database",
 			database: &StubDatabase{
 				users: []User{},
-				posts: []Post{{User: User{Name: "James Clarke"}, Text: "Hello, World!", Id: 1}, {User: User{Name: "Jane Smith"}, Text: "Hello, World!", Id: 2}},
+				posts: []Post{{User: User{Name: "James Clarke"}, Text: "Hello, World!", Id: 1, Likes: 1}, {User: User{Name: "Jane Smith"}, Text: "Hello, World!", Id: 2, Likes: 0}},
 			},
 			requestPath: "/Posts/",
-			want:        "[{\"Text\":\"Hello, World!\",\"User\":{\"Name\":\"James Clarke\"},\"Id\":1},{\"Text\":\"Hello, World!\",\"User\":{\"Name\":\"Jane Smith\"},\"Id\":2}]",
+			want:        "[{\"Text\":\"Hello, World!\",\"User\":{\"Name\":\"James Clarke\"},\"Id\":1,\"Likes\":1},{\"Text\":\"Hello, World!\",\"User\":{\"Name\":\"Jane Smith\"},\"Id\":2,\"Likes\":0}]",
 		},
 		{
 			name: "Get a user from database",
@@ -75,10 +75,10 @@ func TestServer(t *testing.T) {
 			name: "Get a post from database",
 			database: &StubDatabase{
 				users: []User{},
-				posts: []Post{{User: User{Name: "James Clarke"}, Text: "Hello, World!", Id: 1}, {User: User{Name: "Jane Smith"}, Text: "Hello, World!", Id: 2}},
+				posts: []Post{{User: User{Name: "James Clarke"}, Text: "Hello, World!", Id: 1, Likes: 1}, {User: User{Name: "Jane Smith"}, Text: "Hello, World!", Id: 2, Likes: 0}},
 			},
 			requestPath: "/Posts/1",
-			want:        "{\"Text\":\"Hello, World!\",\"User\":{\"Name\":\"James Clarke\"},\"Id\":1}",
+			want:        "{\"Text\":\"Hello, World!\",\"User\":{\"Name\":\"James Clarke\"},\"Id\":1,\"Likes\":1}",
 		},
 	}
 

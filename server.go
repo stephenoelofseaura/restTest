@@ -1,13 +1,24 @@
 package restApi
 
-//Add User
-//Add Post
-//Get User
-//Get Post
-//Add Likes
-//Get Likes
-//Get Comments
-//Add Comments
+//Create User
+//Create Comment
+//Create Post
+//Create Likes
+
+//Read Single User
+//Read All Users
+//Read Post by Id
+//Read All Posts by User
+//Read All Posts
+
+//Update User
+//Update Comment
+//Update Post
+//Update Likes
+
+//Delete User
+//Delete Comment
+//Delete Post
 
 import (
 	"encoding/json"
@@ -23,9 +34,10 @@ type User struct {
 }
 
 type Post struct {
-	Text string `json:"Text"`
-	User User   `json:"User"`
-	Id   int    `json:"Id"`
+	Text  string `json:"Text"`
+	User  User   `json:"User"`
+	Id    int    `json:"Id"`
+	Likes int    `json:"Likes"`
 }
 
 type Database interface {
@@ -63,6 +75,7 @@ func (s *SocialMediaServer) ServeHTTP(w http.ResponseWriter, r *http.Request) er
 				return nil
 			}
 		}
+
 		if strings.HasPrefix(r.URL.Path, "/Posts/") {
 			post := strings.TrimPrefix(r.URL.Path, "/Posts/")
 			if post == "" {
