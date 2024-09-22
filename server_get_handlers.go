@@ -14,7 +14,7 @@ func serverGetHandler(w http.ResponseWriter, r *http.Request, s *SocialMediaServ
 		user := strings.TrimPrefix(r.URL.Path, "/Users/")
 		if user == "" {
 			fmt.Println("Getting Users")
-			err := db.convertAndWriteData(s.database.GetUsers(), w)
+			err := db.ConvertAndWriteData(s.database.GetUsers(), w)
 			if err != nil {
 				return errors.New("Error converting data. Error: " + err.Error())
 			}
@@ -22,7 +22,7 @@ func serverGetHandler(w http.ResponseWriter, r *http.Request, s *SocialMediaServ
 		} else {
 			user = strings.TrimSuffix(user, "/")
 			fmt.Println("Getting User: " + user)
-			err := db.convertAndWriteData(s.database.GetUser(user), w)
+			err := db.ConvertAndWriteData(s.database.GetUser(user), w)
 			if err != nil {
 				return errors.New("Error converting data. Error: " + err.Error())
 			}
@@ -34,7 +34,7 @@ func serverGetHandler(w http.ResponseWriter, r *http.Request, s *SocialMediaServ
 		post := strings.TrimPrefix(r.URL.Path, "/Posts/")
 		if post == "" {
 			fmt.Println("Getting Posts")
-			err := db.convertAndWriteData(s.database.GetPosts(), w)
+			err := db.ConvertAndWriteData(s.database.GetPosts(), w)
 			if err != nil {
 				return errors.New("Error converting data. Error: " + err.Error())
 			}
@@ -45,7 +45,7 @@ func serverGetHandler(w http.ResponseWriter, r *http.Request, s *SocialMediaServ
 			if err != nil {
 				return errors.New("Error converting post number. Error: " + err.Error())
 			}
-			err = db.convertAndWriteData(s.database.GetPost(postNum), w)
+			err = db.ConvertAndWriteData(s.database.GetPost(postNum), w)
 			if err != nil {
 				return errors.New("Error converting data. Error: " + err.Error())
 			}

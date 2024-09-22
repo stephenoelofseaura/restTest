@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func convertAndWriteData(data any, w http.ResponseWriter) error {
+func ConvertAndWriteData(data any, w http.ResponseWriter) error {
 	convertedData, err := json.Marshal(data)
 	if err != nil {
 		return errors.New("Error marshalling data, Error: " + err.Error())

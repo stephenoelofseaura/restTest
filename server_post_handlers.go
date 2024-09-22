@@ -24,7 +24,7 @@ func serverPostHandler(w http.ResponseWriter, r *http.Request, s *SocialMediaSer
 		if userCreationErr != nil {
 			return errors.New("Error creating user. Error: " + userCreationErr.Error())
 		} else {
-			convertErr := db.convertAndWriteData(newUser, w)
+			convertErr := db.ConvertAndWriteData(newUser, w)
 			if convertErr != nil {
 				return errors.New("Error converting data. Error: " + convertErr.Error())
 			}
@@ -46,7 +46,7 @@ func serverPostHandler(w http.ResponseWriter, r *http.Request, s *SocialMediaSer
 			if postCreationError != nil {
 				return errors.New("Error creating post. Error: " + postCreationError.Error())
 			} else {
-				convertErr := db.convertAndWriteData(newPost, w)
+				convertErr := db.ConvertAndWriteData(newPost, w)
 				if convertErr != nil {
 					return errors.New("Error converting data. Error: " + convertErr.Error())
 				}
@@ -70,7 +70,7 @@ func serverPostHandler(w http.ResponseWriter, r *http.Request, s *SocialMediaSer
 				if commentCreationError != nil {
 					return errors.New("Database returned error creating comment. Error: " + commentCreationError.Error())
 				} else {
-					convertErr := db.convertAndWriteData(newComment, w)
+					convertErr := db.ConvertAndWriteData(newComment, w)
 					if convertErr != nil {
 						return errors.New("Error converting data. Error: " + convertErr.Error())
 					}

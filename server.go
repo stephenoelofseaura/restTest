@@ -14,7 +14,6 @@ package main
 
 import (
 	"errors"
-	"github.com/username/rest-test/pkg/db"
 	"net/http"
 )
 
