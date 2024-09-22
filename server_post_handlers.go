@@ -12,6 +12,7 @@ import (
 )
 
 func serverPostHandler(w http.ResponseWriter, r *http.Request, s *SocialMediaServer) error {
+	//Add Single User
 	if strings.HasPrefix(r.URL.Path, "/Users/") {
 		fmt.Println("Creating User")
 		body := r.Body
@@ -32,6 +33,7 @@ func serverPostHandler(w http.ResponseWriter, r *http.Request, s *SocialMediaSer
 		}
 	}
 
+	//Add Single Post
 	if strings.HasPrefix(r.URL.Path, "/Posts/") {
 		pathWithoutPrefix := strings.TrimPrefix(r.URL.Path, "/Posts/")
 		if pathWithoutPrefix == "" {
@@ -53,6 +55,7 @@ func serverPostHandler(w http.ResponseWriter, r *http.Request, s *SocialMediaSer
 			}
 			return nil
 		} else {
+			//Add Comment to Post
 			if strings.HasSuffix(pathWithoutPrefix, "/Comments/") {
 				postId := strings.TrimSuffix(pathWithoutPrefix, "/Comments/")
 				fmt.Println("Creating Comment for Post: " + postId)

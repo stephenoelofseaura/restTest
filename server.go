@@ -1,7 +1,6 @@
 package main
 
 //TODO
-//Read All Posts by User
 
 //Update User
 //Update Comment
@@ -46,6 +45,7 @@ type Database interface {
 
 	GetPosts() []Post
 	GetPost(id int) Post
+	GetPostsByUser(name string) []Post
 	CreatePost(post Post) error
 }
 
@@ -60,13 +60,30 @@ func (s *SocialMediaServer) ServeHTTP(w http.ResponseWriter, r *http.Request) er
 	//Read All Users
 	//Read Post by Id
 	//Read All Posts
+	//Read All Posts by a User
 	case http.MethodGet:
 		return serverGetHandler(w, r, s)
 
 	//Create User
 	//Create Post
+	//Create Comment
 	case http.MethodPost:
 		return serverPostHandler(w, r, s)
 	}
 	return errors.New("Unsupported method")
 }
+
+// package main
+//
+// import (
+// 	"fmt"
+// 	"regexp"
+// 	"strings"
+// )
+//
+// func main() {
+// 	str := "JamesClarke"
+// 	re := regexp.MustCompile("([A-Z][a-z0-9]+)")
+// 	words := re.FindAllString(str, -1)
+// 	fmt.Println(strings.Join(words, " "))
+// }

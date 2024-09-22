@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"regexp"
 	"strings"
 )
 
@@ -26,6 +27,18 @@ func (s *StubDatabase) CreateUser(newUser User) error {
 
 func (s *StubDatabase) GetPosts() []Post {
 	return s.posts
+}
+
+func (s *StubDatabase) GetPostsByUser(name string) []Post {
+	var posts []Post
+	re := regexp.MustCompile("([A-Z][a-z0-9]+)")
+	dataBaseFriendlyName := strings.Join(re.FindAllString(name, -1), " ")
+	for _, post := range s.posts {
+		if post.User.Name == dataBaseFriendlyName {
+			posts = append(posts, post)
+		}
+	}
+	return posts
 }
 
 func (s *StubDatabase) CreatePost(newPost Post) error {
