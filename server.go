@@ -1,15 +1,7 @@
-package restApi
+package main
 
-//Create User
-//Create Comment
-//Create Post
-//Create Likes
-
-//Read Single User
-//Read All Users
-//Read Post by Id
+//TODO
 //Read All Posts by User
-//Read All Posts
 
 //Update User
 //Update Comment
@@ -21,30 +13,41 @@ package restApi
 //Delete Post
 
 import (
-	"encoding/json"
 	"errors"
-	"fmt"
+	"github.com/username/rest-test/pkg/db"
 	"net/http"
-	"strconv"
-	"strings"
 )
 
 type User struct {
 	Name string `json:"Name"`
 }
 
+type Comment struct {
+	Text string `json:"Text"`
+	User User   `json:"User"`
+	Id   int    `json:"Id"`
+}
+
+type Comments []Comment
+
 type Post struct {
-	Text  string `json:"Text"`
-	User  User   `json:"User"`
-	Id    int    `json:"Id"`
-	Likes int    `json:"Likes"`
+	Text     string   `json:"Text"`
+	User     User     `json:"User"`
+	Id       int      `json:"Id"`
+	Likes    int      `json:"Likes"`
+	Comments Comments `json:"Comments"`
 }
 
 type Database interface {
 	GetUsers() []User
+	GetUser(name string) User
+	CreateUser(user User) error
+
+	CreateComment(comment Comment, postId int) error
+
 	GetPosts() []Post
 	GetPost(id int) Post
-	GetUser(name string) User
+	CreatePost(post Post) error
 }
 
 type SocialMediaServer struct {
@@ -54,67 +57,17 @@ type SocialMediaServer struct {
 func (s *SocialMediaServer) ServeHTTP(w http.ResponseWriter, r *http.Request) error {
 	switch r.Method {
 
+	//Read Single User
+	//Read All Users
+	//Read Post by Id
+	//Read All Posts
 	case http.MethodGet:
+		return serverGetHandler(w, r, s)
 
-		if strings.HasPrefix(r.URL.Path, "/Users/") {
-			user := strings.TrimPrefix(r.URL.Path, "/Users/")
-			if user == "" {
-				fmt.Println("Getting Users")
-				err := convertAndWriteData(s.database.GetUsers(), w)
-				if err != nil {
-					return errors.New("Error converting data. Error: " + err.Error())
-				}
-				return nil
-			} else {
-				user = strings.TrimSuffix(user, "/")
-				fmt.Println("Getting User: " + user)
-				err := convertAndWriteData(s.database.GetUser(user), w)
-				if err != nil {
-					return errors.New("Error converting data. Error: " + err.Error())
-				}
-				return nil
-			}
-		}
-
-		if strings.HasPrefix(r.URL.Path, "/Posts/") {
-			post := strings.TrimPrefix(r.URL.Path, "/Posts/")
-			if post == "" {
-				fmt.Println("Getting Posts")
-				err := convertAndWriteData(s.database.GetPosts(), w)
-				if err != nil {
-					return errors.New("Error converting data. Error: " + err.Error())
-				}
-				return nil
-			} else {
-				fmt.Println("Getting Post: " + post)
-				postNum, err := strconv.Atoi(post)
-				if err != nil {
-					return errors.New("Error converting post number. Error: " + err.Error())
-				}
-				err = convertAndWriteData(s.database.GetPost(postNum), w)
-				if err != nil {
-					return errors.New("Error converting data. Error: " + err.Error())
-				}
-				return nil
-			}
-		}
+	//Create User
+	//Create Post
+	case http.MethodPost:
+		return serverPostHandler(w, r, s)
 	}
-
 	return errors.New("Unsupported method")
-}
-
-func convertAndWriteData(data any, w http.ResponseWriter) error {
-	convertedData, err := json.Marshal(data)
-	if err != nil {
-		return errors.New("Error marshalling data, Error: " + err.Error())
-	}
-	w.WriteHeader(http.StatusOK)
-	_, writeErr := w.Write(convertedData)
-	if writeErr != nil {
-		return errors.New("Error writing response")
-	}
-	return nil
-}
-
-func main() {
 }

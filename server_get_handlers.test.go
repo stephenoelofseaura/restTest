@@ -1,43 +1,12 @@
-package restApi
+package main
 
 import (
 	"net/http"
 	"net/http/httptest"
-	"strings"
 	"testing"
 )
 
-type StubDatabase struct {
-	users []User
-	posts []Post
-}
-
-func (s *StubDatabase) GetUsers() []User {
-	return s.users
-}
-func (s *StubDatabase) GetPosts() []Post {
-	return s.posts
-}
-func (s *StubDatabase) GetPost(Id int) Post {
-	for _, post := range s.posts {
-		if post.Id == Id {
-			return post
-		}
-	}
-	return Post{}
-}
-func (s *StubDatabase) GetUser(name string) User {
-	for _, user := range s.users {
-		newName := strings.Replace(user.Name, " ", "", -1)
-		if newName == name {
-			return user
-		}
-	}
-	return User{}
-}
-
 func TestServer(t *testing.T) {
-
 	getTests := []struct {
 		name        string
 		database    *StubDatabase
@@ -57,10 +26,10 @@ func TestServer(t *testing.T) {
 			name: "Get all posts from database",
 			database: &StubDatabase{
 				users: []User{},
-				posts: []Post{{User: User{Name: "James Clarke"}, Text: "Hello, World!", Id: 1, Likes: 1}, {User: User{Name: "Jane Smith"}, Text: "Hello, World!", Id: 2, Likes: 0}},
+				posts: []Post{{User: User{Name: "James Clarke"}, Text: "Hello, World!", Id: 1, Likes: 1, Comments: Comments{{Text: "This is a comment", User: User{Name: "Jane Smith"}, Id: 5}}}, {User: User{Name: "Jane Smith"}, Text: "Hello, World!", Id: 2, Likes: 0}},
 			},
 			requestPath: "/Posts/",
-			want:        "[{\"Text\":\"Hello, World!\",\"User\":{\"Name\":\"James Clarke\"},\"Id\":1,\"Likes\":1},{\"Text\":\"Hello, World!\",\"User\":{\"Name\":\"Jane Smith\"},\"Id\":2,\"Likes\":0}]",
+			want:        "[{\"Text\":\"Hello, World!\",\"User\":{\"Name\":\"James Clarke\"},\"Id\":1,\"Likes\":1,\"Comments\":[{\"Text\":\"This is a comment\",\"User\":{\"Name\":\"Jane Smith\"},\"Id\":5}]},{\"Text\":\"Hello, World!\",\"User\":{\"Name\":\"Jane Smith\"},\"Id\":2,\"Likes\":0,\"Comments\":null}]",
 		},
 		{
 			name: "Get a user from database",
@@ -78,7 +47,7 @@ func TestServer(t *testing.T) {
 				posts: []Post{{User: User{Name: "James Clarke"}, Text: "Hello, World!", Id: 1, Likes: 1}, {User: User{Name: "Jane Smith"}, Text: "Hello, World!", Id: 2, Likes: 0}},
 			},
 			requestPath: "/Posts/1",
-			want:        "{\"Text\":\"Hello, World!\",\"User\":{\"Name\":\"James Clarke\"},\"Id\":1,\"Likes\":1}",
+			want:        "{\"Text\":\"Hello, World!\",\"User\":{\"Name\":\"James Clarke\"},\"Id\":1,\"Likes\":1,\"Comments\":null}",
 		},
 	}
 
