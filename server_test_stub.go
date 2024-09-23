@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"regexp"
 	"strings"
 )
@@ -23,6 +24,21 @@ func (s *StubDatabase) CreateUser(newUser User) error {
 	}
 	s.users = append(s.users, newUser)
 	return nil
+}
+
+func (s *StubDatabase) UpdateUser(name string, updatedUser User) error {
+	fmt.Println(name)
+	re := regexp.MustCompile("([A-Z][a-z0-9]+)")
+	dataBaseFriendlyName := strings.Join(re.FindAllString(name, -1), " ")
+	for i, user := range s.users {
+		// fmt.Println(dataBaseFriendlyName)
+		// fmt.Println(user)
+		if user.Name == dataBaseFriendlyName {
+			s.users[i] = updatedUser
+			return nil
+		}
+	}
+	return errors.New("User with this name does not exist, could not update user")
 }
 
 func (s *StubDatabase) GetPosts() []Post {

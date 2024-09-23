@@ -11,7 +11,7 @@ import (
 	"github.com/username/rest-test/pkg/db"
 )
 
-func serverPostHandler(w http.ResponseWriter, r *http.Request, s *SocialMediaServer) error {
+func ServerPostHandler(w http.ResponseWriter, r *http.Request, s *SocialMediaServer) error {
 	//Add Single User
 	if strings.HasPrefix(r.URL.Path, "/Users/") {
 		fmt.Println("Creating User")

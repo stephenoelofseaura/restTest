@@ -40,6 +40,7 @@ type Database interface {
 	GetUsers() []User
 	GetUser(name string) User
 	CreateUser(user User) error
+	UpdateUser(name string, updatedUser User) error
 
 	CreateComment(comment Comment, postId int) error
 
@@ -62,14 +63,19 @@ func (s *SocialMediaServer) ServeHTTP(w http.ResponseWriter, r *http.Request) er
 	//Read All Posts
 	//Read All Posts by a User
 	case http.MethodGet:
-		return serverGetHandler(w, r, s)
+		return ServerGetHandler(w, r, s)
 
 	//Create User
 	//Create Post
 	//Create Comment
 	case http.MethodPost:
-		return serverPostHandler(w, r, s)
+		return ServerPostHandler(w, r, s)
+
+	case http.MethodPut:
+		return ServerPutHandler(w, r, s)
+
 	}
+
 	return errors.New("Unsupported method")
 }
 

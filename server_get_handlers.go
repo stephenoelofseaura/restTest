@@ -10,7 +10,7 @@ import (
 	"github.com/username/rest-test/pkg/db"
 )
 
-func serverGetHandler(w http.ResponseWriter, r *http.Request, s *SocialMediaServer) error {
+func ServerGetHandler(w http.ResponseWriter, r *http.Request, s *SocialMediaServer) error {
 
 	if strings.HasPrefix(r.URL.Path, "/Users/") {
 		user := strings.TrimPrefix(r.URL.Path, "/Users/")

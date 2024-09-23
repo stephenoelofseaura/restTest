@@ -143,4 +143,47 @@ func TestServerGet(t *testing.T) {
 			}
 		})
 	}
+
+	updateTests := []struct {
+		name          string
+		updatedString string
+		database      *StubDatabase
+		requestPath   string
+		body          string
+		want          string
+	}{
+		{
+			name:          "Update user",
+			updatedString: "{\"Name\":\"James Mark\"}",
+			database: &StubDatabase{
+				users: []User{{Name: "James Clarke"}, {Name: "Jane Smith"}},
+				posts: []Post{},
+			},
+			requestPath: "/Users/JamesClarke/",
+			body:        "{\"Name\":\"James Mark\"}",
+			want:        "{\"Name\":\"James Mark\"}",
+		},
+	}
+
+	for _, tt := range updateTests {
+		t.Run(tt.name, func(t *testing.T) {
+			request := httptest.NewRequest(http.MethodPut, tt.requestPath, strings.NewReader(tt.body))
+			response := httptest.NewRecorder()
+
+			server := &SocialMediaServer{database: tt.database}
+
+			err := server.ServeHTTP(response, request)
+
+			if err != nil {
+				t.Fatalf("ServeHTTP has returned an error %v", err)
+			}
+
+			got := response.Body.String()
+
+			if got != tt.want {
+				t.Errorf("got %q, want %q", got, tt.want)
+			}
+		})
+	}
+
 }
