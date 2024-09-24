@@ -2,9 +2,7 @@ package main
 
 //TODO
 
-//Update User
-//Update Comment
-//Update Post
+//TODO//Update Comment
 //Update Likes
 
 //Delete User
@@ -46,7 +44,10 @@ type Database interface {
 
 	GetPosts() []Post
 	GetPost(id int) Post
+	UpdatePosts(id int, updatedPost Post) error
+
 	GetPostsByUser(name string) []Post
+
 	CreatePost(post Post) error
 }
 
@@ -71,9 +72,10 @@ func (s *SocialMediaServer) ServeHTTP(w http.ResponseWriter, r *http.Request) er
 	case http.MethodPost:
 		return ServerPostHandler(w, r, s)
 
+	//Update User
+	//Update Post
 	case http.MethodPut:
 		return ServerPutHandler(w, r, s)
-
 	}
 
 	return errors.New("Unsupported method")

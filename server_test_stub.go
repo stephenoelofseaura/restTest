@@ -2,8 +2,7 @@ package main
 
 import (
 	"errors"
-	"fmt"
-	"regexp"
+	"github.com/username/rest-test/pkg/db"
 	"strings"
 )
 
@@ -27,12 +26,8 @@ func (s *StubDatabase) CreateUser(newUser User) error {
 }
 
 func (s *StubDatabase) UpdateUser(name string, updatedUser User) error {
-	fmt.Println(name)
-	re := regexp.MustCompile("([A-Z][a-z0-9]+)")
-	dataBaseFriendlyName := strings.Join(re.FindAllString(name, -1), " ")
+	dataBaseFriendlyName := db.SplitCamelCaseString(name)
 	for i, user := range s.users {
-		// fmt.Println(dataBaseFriendlyName)
-		// fmt.Println(user)
 		if user.Name == dataBaseFriendlyName {
 			s.users[i] = updatedUser
 			return nil
@@ -47,8 +42,7 @@ func (s *StubDatabase) GetPosts() []Post {
 
 func (s *StubDatabase) GetPostsByUser(name string) []Post {
 	var posts []Post
-	re := regexp.MustCompile("([A-Z][a-z0-9]+)")
-	dataBaseFriendlyName := strings.Join(re.FindAllString(name, -1), " ")
+	dataBaseFriendlyName := db.SplitCamelCaseString(name)
 	for _, post := range s.posts {
 		if post.User.Name == dataBaseFriendlyName {
 			posts = append(posts, post)
@@ -65,6 +59,16 @@ func (s *StubDatabase) CreatePost(newPost Post) error {
 	}
 	s.posts = append(s.posts, newPost)
 	return nil
+}
+
+func (s *StubDatabase) UpdatePosts(postId int, newPost Post) error {
+	for _, post := range s.posts {
+		if post.Id == postId {
+
+		}
+	}
+	return nil
+
 }
 
 func (s *StubDatabase) GetPost(Id int) Post {

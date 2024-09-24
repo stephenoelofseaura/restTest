@@ -163,6 +163,17 @@ func TestServerGet(t *testing.T) {
 			body:        "{\"Name\":\"James Mark\"}",
 			want:        "{\"Name\":\"James Mark\"}",
 		},
+		{
+			name:          "Update post",
+			updatedString: "{\"Text\":\"Hello, World!\",\"User\":{\"Name\":\"James Clarke\"},\"Id\":1,\"Likes\":1,\"Comments\":null}",
+			database: &StubDatabase{
+				users: []User{{Name: "James Clarke"}, {Name: "Jane Smith"}},
+				posts: []Post{{User: User{Name: "James Clarke"}, Text: "Hello, World!", Id: 1, Likes: 1, Comments: Comments{{Text: "This is a comment", User: User{Name: "Jane Smith"}, Id: 5}}}, {User: User{Name: "Jane Smith"}, Text: "Hello, World!", Id: 2, Likes: 0}},
+			},
+			requestPath: "/Posts/1/",
+			body:        "{\"Text\":\"Hello, World!\",\"User\":{\"Name\":\"James Clarke\"},\"Id\":1,\"Likes\":1,\"Comments\":[{\"Text\":\"This is a comment\",\"User\":{\"Name\":\"Jane Smith\"},\"Id\":5}]}",
+			want:        "{\"Text\":\"Hello, World!\",\"User\":{\"Name\":\"James Clarke\"},\"Id\":1,\"Likes\":1,\"Comments\":[{\"Text\":\"This is a comment\",\"User\":{\"Name\":\"Jane Smith\"},\"Id\":5}]}",
+		},
 	}
 
 	for _, tt := range updateTests {
